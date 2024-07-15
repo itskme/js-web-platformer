@@ -27,13 +27,23 @@ let level1 = {
 let level2 = {
   platforms: [
     { x: 0, y: 550, width: 800, height: 50 }, // ground
-    { x: 200, y: 400, width: 250, height: 29 }, // platform 1
-    { x: 400, y: 300, width: 200, height: 20 }, // platform 2
+    { x: 200, y: 400, width: 20, height: 20 }, // platform 1
+    { x: 400, y: 250, width: 20, height: 20 }, // platform 2
     { x: 600, y: 200, width: 200, height: 20 } // platform 3
   ]
 };
 
+let level3 = {
+    platforms: [
+      { x: 0, y: 550, width: 800, height: 50 }, // ground
+      { x: 200, y: 400, width: 20, height: 20 }, // platform 1
+      { x: 400, y: 250, width: 10, height: 20 }, // platform 2
+      { x: 600, y: 200, width: 200, height: 20 } // platform 3
+    ]
+  };
+
 let currentLevel = level1;
+let currentLevelIndex = 1;
 
 let gravity = 0.38;
 
@@ -107,8 +117,19 @@ document.addEventListener('keydown', function(e) {
   } else if (e.key === 'ArrowUp' && !player.jumping) {
     player.jumping = true;
     player.velY = -9;
-  } else if (e.key === 'l') {
-    currentLevel = level2;
+} else if (e.key === 'l') {
+    currentLevelIndex = (currentLevelIndex + 1) % 3 + 1;
+    switch (currentLevelIndex) {
+      case 1:
+        currentLevel = level1;
+        break;
+      case 2:
+        currentLevel = level2;
+        break;
+      case 3:
+        currentLevel = level3;
+        break;
+    }
     player.x = 100;
     player.y = 100;
   }
