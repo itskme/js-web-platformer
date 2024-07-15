@@ -1,9 +1,11 @@
 body {
     margin: 0;
     padding: 0;
-    background-color: #f0f0f0;
+    background-color: #000000;
+    text-align: center;
+    border-radius: 2.5em;
   }
   
   #gameCanvas {
-    border: 1px solid black;
+    border: 5px solid rgb(175, 0, 0);
   }

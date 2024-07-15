@@ -15,17 +15,29 @@ let player = {
   velY: 0
 };
 
-let platforms = [
-  { x: 0, y: 550, width: 800, height: 50 },
-  { x: 200, y: 400, width: 200, height: 20 },
-  { x: 400, y: 300, width: 200, height: 20 },
-  { x: 600, y: 200, width: 200, height: 20 }
-];
+let level1 = {
+  platforms: [
+    { x: 0, y: 550, width: 800, height: 50 }, // ground
+    { x: 200, y: 400, width: 200, height: 20 }, // platform 1
+    { x: 400, y: 300, width: 200, height: 20 }, // platform 2
+    { x: 600, y: 200, width: 200, height: 20 } // platform 3
+  ]
+};
+
+let level2 = {
+  platforms: [
+    { x: 0, y: 550, width: 800, height: 50 }, // ground
+    { x: 200, y: 400, width: 250, height: 29 }, // platform 1
+    { x: 400, y: 300, width: 200, height: 20 }, // platform 2
+    { x: 600, y: 200, width: 200, height: 20 } // platform 3
+  ]
+};
+
+let currentLevel = level1;
 
 let gravity = 0.38;
 
 function update() {
- 
   if (player.velX > 0) {
     player.velX -= player.deceleration;
     if (player.velX < 0) player.velX = 0;
@@ -34,7 +46,6 @@ function update() {
     if (player.velX > 0) player.velX = 0;
   }
 
-  
   if (leftArrowPressed) {
     player.velX -= player.acceleration;
     if (player.velX < -player.maxVelocity) player.velX = -player.maxVelocity;
@@ -43,10 +54,8 @@ function update() {
     if (player.velX > player.maxVelocity) player.velX = player.maxVelocity;
   }
 
-  
   player.x += player.velX;
 
-  
   player.velY += gravity;
   player.y += player.velY;
 
@@ -56,9 +65,9 @@ function update() {
     player.velY = 0;
   }
 
-  for (let i = 0; i < platforms.length; i++) {
-    if (checkCollision(player, platforms[i])) {
-      player.y = platforms[i].y - player.height;
+  for (let i = 0; i < currentLevel.platforms.length; i++) {
+    if (checkCollision(player, currentLevel.platforms[i])) {
+      player.y = currentLevel.platforms[i].y - player.height;
       player.jumping = false;
       player.velY = 0;
     }
@@ -72,8 +81,8 @@ function draw() {
   ctx.fillRect(player.x, player.y, player.width, player.height);
 
   ctx.fillStyle = 'brown';
-  for (let i = 0; i < platforms.length; i++) {
-    ctx.fillRect(platforms[i].x, platforms[i].y, platforms[i].width, platforms[i].height);
+  for (let i = 0; i < currentLevel.platforms.length; i++) {
+    ctx.fillRect(currentLevel.platforms[i].x, currentLevel.platforms[i].y, currentLevel.platforms[i].width, currentLevel.platforms[i].height);
   }
 }
 
@@ -90,7 +99,7 @@ function checkCollision(rect1, rect2) {
 let leftArrowPressed = false;
 let rightArrowPressed = false;
 
-document.addEventListener('keydown', (e) => {
+document.addEventListener('keydown', function(e) {
   if (e.key === 'ArrowLeft') {
     leftArrowPressed = true;
   } else if (e.key === 'ArrowRight') {
@@ -98,10 +107,14 @@ document.addEventListener('keydown', (e) => {
   } else if (e.key === 'ArrowUp' && !player.jumping) {
     player.jumping = true;
     player.velY = -9;
+  } else if (e.key === 'l') {
+    currentLevel = level2;
+    player.x = 100;
+    player.y = 100;
   }
 });
 
-document.addEventListener('keyup', (e) => {
+document.addEventListener('keyup', function(e) {
   if (e.key === 'ArrowLeft') {
     leftArrowPressed = false;
   } else if (e.key === 'ArrowRight') {
@@ -109,7 +122,7 @@ document.addEventListener('keyup', (e) => {
   }
 });
 
-setInterval(() => {
+setInterval(function() {
   update();
   draw();
 }, 16);
