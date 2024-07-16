@@ -27,7 +27,7 @@ let level1 = {
 let level2 = {
   platforms: [
     { x: 0, y: 550, width: 800, height: 50 }, // ground
-    { x: 200, y: 400, width: 20, height: 20 }, // platform 1
+    { x: 500, y: 400, width: 20, height: 20 }, // platform 1
     { x: 400, y: 250, width: 20, height: 20 }, // platform 2
     { x: 600, y: 200, width: 200, height: 20 } // platform 3
   ]
@@ -37,7 +37,7 @@ let level3 = {
     platforms: [
       { x: 0, y: 550, width: 800, height: 50 }, // ground
       { x: 200, y: 400, width: 20, height: 20 }, // platform 1
-      { x: 400, y: 250, width: 10, height: 20 }, // platform 2
+      { x: 400, y: 250, width: 20, height: 20 }, // platform 2
       { x: 600, y: 200, width: 200, height: 20 } // platform 3
     ]
   };
@@ -46,6 +46,9 @@ let currentLevel = level1;
 let currentLevelIndex = 1;
 
 let gravity = 0.38;
+
+let flashFlag = false;
+let flashCount = 0;
 
 function update() {
   if (player.velX > 0) {
@@ -80,6 +83,11 @@ function update() {
       player.y = currentLevel.platforms[i].y - player.height;
       player.jumping = false;
       player.velY = 0;
+
+      // Check if player has reached platform 3 on level 2
+      if (currentLevelIndex === 2 && i === 3) {
+        flashFlag = true;
+      }
     }
   }
 }
@@ -87,12 +95,29 @@ function update() {
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  ctx.fillStyle = 'blue';
+  ctx.fillStyle = 'red';
   ctx.fillRect(player.x, player.y, player.width, player.height);
 
-  ctx.fillStyle = 'brown';
+  ctx.fillStyle = 'orange';
   for (let i = 0; i < currentLevel.platforms.length; i++) {
     ctx.fillRect(currentLevel.platforms[i].x, currentLevel.platforms[i].y, currentLevel.platforms[i].width, currentLevel.platforms[i].height);
+  }
+
+  if (flashFlag) {
+    flashCount++;
+    if (flashCount % 2 === 0) {
+      ctx.fillStyle = 'lime';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    } else {
+      ctx.fillStyle = 'black';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
+    ctx.font = '50px catamaran';
+    ctx.fillStyle = 'white';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('YOU DID IT!', canvas.width / 2, canvas.height / 2);
   }
 }
 
@@ -117,7 +142,7 @@ document.addEventListener('keydown', function(e) {
   } else if (e.key === 'ArrowUp' && !player.jumping) {
     player.jumping = true;
     player.velY = -9;
-} else if (e.key === 'l') {
+  } else if (e.key === 'l') {
     currentLevelIndex = (currentLevelIndex + 1) % 3 + 1;
     switch (currentLevelIndex) {
       case 1:

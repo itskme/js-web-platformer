@@ -1,11 +1,26 @@
+@font-face {
+    font-family: "catamaran";
+    src: url(CatamaranThin.ttf);
+    
+}
+
 body {
     margin: 0;
     padding: 0;
     background-color: #000000;
     text-align: center;
     border-radius: 2.5em;
+    font-family: catamaran, helvetica;
   }
   
   #gameCanvas {
     border: 5px solid rgb(175, 0, 0);
+  }
+
+  h1 {
+    color: white;
+  }
+
+  .level-text {
+    color: rgb(231, 22, 22);
   }
