@@ -47,8 +47,7 @@ let currentLevelIndex = 1;
 
 let gravity = 0.38;
 
-let flashFlag = false;
-let flashCount = 0;
+let showMessage = false;
 
 function update() {
   if (player.velX > 0) {
@@ -84,10 +83,11 @@ function update() {
       player.jumping = false;
       player.velY = 0;
 
-      // Check if player has reached platform 3 on level 2
       if (currentLevelIndex === 2 && i === 3) {
-        flashFlag = true;
+        showMessage = true;
       }
+    } else if (currentLevelIndex === 2 && i === 3 && showMessage) {
+      showMessage = false;
     }
   }
 }
@@ -103,16 +103,7 @@ function draw() {
     ctx.fillRect(currentLevel.platforms[i].x, currentLevel.platforms[i].y, currentLevel.platforms[i].width, currentLevel.platforms[i].height);
   }
 
-  if (flashFlag) {
-    flashCount++;
-    if (flashCount % 2 === 0) {
-      ctx.fillStyle = 'lime';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-    } else {
-      ctx.fillStyle = 'black';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-    }
-
+  if (showMessage) {
     ctx.font = '50px catamaran';
     ctx.fillStyle = 'white';
     ctx.textAlign = 'center';
@@ -157,6 +148,7 @@ document.addEventListener('keydown', function(e) {
     }
     player.x = 100;
     player.y = 100;
+    showMessage = false;
   }
 });
 
